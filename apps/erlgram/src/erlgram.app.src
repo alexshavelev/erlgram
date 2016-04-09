@@ -1,0 +1,13 @@
+{application, erlgram,
+ [
+  {description, "Erlgram"},
+  {vsn, "git"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  lager
+                 ]},
+  {mod, { erlgram_app, []}},
+  {env, []}
+ ]}.

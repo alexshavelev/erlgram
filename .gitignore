@@ -1,0 +1,9 @@
+*.beam
+*.swp
+*.deb
+ebin
+/deps/
+/build/
+/erlgram/
+erl_crash.dump
+test.config
