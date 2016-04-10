@@ -6,7 +6,10 @@
   {applications, [
                   kernel,
                   stdlib,
-                  lager
+                  lager,
+                  jiffy,
+                  jsx,
+                  cowboy
                  ]},
   {mod, { erlgram_app, []}},
   {env, []}
