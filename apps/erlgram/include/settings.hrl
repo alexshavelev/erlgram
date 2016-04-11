@@ -28,6 +28,17 @@
   message_id
 }).
 
+-record(location, {
+  chat_id,
+  latitude,
+  longitude,
+  disable_notification = undefined,
+  reply_to_message_id = undefined,
+  reply_markup = undefined
+}).
+
+-define(RECORD_TO_TUPLELIST(Rec, Ref), lists:zip(record_info(fields, Rec),tl(tuple_to_list(Ref)))).
+
 -record(http_req, {
   type,
   url,

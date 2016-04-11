@@ -15,81 +15,45 @@
 -export([
   test/0,
   send_message/1,
-  get_bot_token/0,
-  get_telegram_url/0,
-  forward_message/1
+  forward_message/1,
+  send_location/1
 ]).
 
 test() ->
   send_message(#message{chat_id = <<"-133878532">>, text = <<"test">>}).
 
-send_message(Message) ->
-  #message{
-    chat_id = ChatId,
-    text = Text,
-    parse_mode = ParseMode,
-    disable_web_page_preview = DisableWebPagePreview,
-    disable_notification = DisableNotification,
-    reply_to_message_id = ReplyToMessageId,
-    reply_markup = ReplyMarkup
-  } = Message,
-
-  PreBody =
-  [
-    {<<"chat_id">>, ChatId},
-    {<<"text">>, Text},
-    {<<"parse_mode">>, ParseMode},
-    {<<"disable_web_page_preview">>, DisableWebPagePreview},
-    {<<"disable_notification">>, DisableNotification},
-    {<<"reply_to_message_id">>, ReplyToMessageId},
-    {<<"reply_markup">>, ReplyMarkup}
-  ],
-
-  Body = [{K,V} || {K,V} <-PreBody, V =/= undefined],
-
-  JsonBody = util:to_json({Body}),
-  Url = get_url(send_message),
-
-  send_request(#http_req{type = ?POST, url = Url, headers = [{"Content-Type", "application/json"}], body = JsonBody}).
-
-get_bot_token() ->
-  application:get_env(erlgram, bot_token, ?BOT_TOKEN).
-
-get_telegram_url() ->
-  application:get_env(erlgram, telegram_url, ?TELEGRAM_URL).
-
-get_root_url() ->
-  get_telegram_url() ++ "bot" ++ get_bot_token().
-
-get_url(send_message) ->
-  get_root_url() ++ "/sendmessage";
-
-get_url(forward_message) ->
-  get_root_url() ++ "/forwardmessage".
-
 send_request(#http_req{type = Type, url = Url, headers = Headers, body = Body}) ->
   httpc:request(Type, {Url, Headers, "application/json",Body}, [], []).
 
-forward_message(ForwardMessage) ->
+send_message(Message) ->
 
-  #frwd_message{
-    chat_id = ChatId,
-    from_chat_id = FromChatId,
-    disable_notification = DisableNotifications,
-    message_id = MessageId
-  } = ForwardMessage,
-
-  PreBody =
-  [
-    {<<"chat_id">>, ChatId},
-    {<<"from_chat_id">>, FromChatId},
-    {<<"disable_notification">>, DisableNotifications},
-    {<<"message_id">>, MessageId}
-  ],
+  PreBody = ?RECORD_TO_TUPLELIST(message, Message),
 
   Body = [{K,V} || {K,V} <-PreBody, V =/= undefined],
 
   JsonBody = util:to_json({Body}),
-  Url = get_url(forward_message),
+  Url = erlgram_utils:get_url(send_message),
+
+  send_request(#http_req{type = ?POST, url = Url, headers = [{"Content-Type", "application/json"}], body = JsonBody}).
+
+
+forward_message(ForwardMessage) ->
+
+  PreBody = ?RECORD_TO_TUPLELIST(frwd_message, ForwardMessage),
+
+  Body = [{K,V} || {K,V} <-PreBody, V =/= undefined],
+
+  JsonBody = util:to_json({Body}),
+  Url = erlgram_utils:get_url(forward_message),
+
+  send_request(#http_req{type = ?POST, url = Url, headers = [{"Content-Type", "application/json"}], body = JsonBody}).
+
+send_location(LocationMessage) ->
+
+  PreBody = ?RECORD_TO_TUPLELIST(location, LocationMessage),
+  Body = [{K,V} || {K,V} <-PreBody, V =/= undefined],
+
+  JsonBody = util:to_json({Body}),
+  Url = erlgram_utils:get_url(send_location),
 
   send_request(#http_req{type = ?POST, url = Url, headers = [{"Content-Type", "application/json"}], body = JsonBody}).
