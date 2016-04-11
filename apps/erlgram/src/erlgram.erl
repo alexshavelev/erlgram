@@ -25,19 +25,19 @@ test() ->
 send_request(#http_req{type = Type, url = Url, headers = Headers, body = Body}) ->
   httpc:request(Type, {Url, Headers, "application/json", Body}, [], []).
 
-send_message(Message) when is_record(message, Message) ->
+send_message(Message) when is_record(Message, message) ->
 
   Body = ?RECORD_TO_TUPLELIST(message, Message),
   Url = erlgram_utils:get_url(send_message),
   send_to_telegram(Body, Url).
 
-forward_message(ForwardMessage) when is_record(frwd_message, ForwardMessage) ->
+forward_message(ForwardMessage) when is_record(ForwardMessage, frwd_message) ->
 
   Body = ?RECORD_TO_TUPLELIST(frwd_message, ForwardMessage),
   Url = erlgram_utils:get_url(forward_message),
   send_to_telegram(Body, Url).
 
-send_location(LocationMessage) when is_record(location, LocationMessage) ->
+send_location(LocationMessage) when is_record(LocationMessage, location) ->
 
   Body = ?RECORD_TO_TUPLELIST(location, LocationMessage),
   Url = erlgram_utils:get_url(send_location),
