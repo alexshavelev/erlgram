@@ -20,3 +20,14 @@
   reply_to_message_id = undefined,
   reply_markup = undefined
 }).
+
+-record(http_req, {
+  type,
+  url,
+  headers,
+  body,
+  timeout = 5000
+}).
+
+-define(POST, post).
+-define(GET, get).

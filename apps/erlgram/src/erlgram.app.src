@@ -7,6 +7,8 @@
                   kernel,
                   stdlib,
                   lager,
+                  inets,
+                  ssl,
                   jiffy,
                   jsx,
                   cowboy
