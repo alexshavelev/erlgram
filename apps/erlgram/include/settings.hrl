@@ -21,6 +21,13 @@
   reply_markup = undefined
 }).
 
+-record(frwd_message, {
+  chat_id,
+  from_chat_id,
+  disable_notification = false,
+  message_id
+}).
+
 -record(http_req, {
   type,
   url,

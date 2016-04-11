@@ -16,7 +16,8 @@
   test/0,
   send_message/1,
   get_bot_token/0,
-  get_telegram_url/0
+  get_telegram_url/0,
+  forward_message/1
 ]).
 
 test() ->
@@ -57,8 +58,38 @@ get_bot_token() ->
 get_telegram_url() ->
   application:get_env(erlgram, telegram_url, ?TELEGRAM_URL).
 
+get_root_url() ->
+  get_telegram_url() ++ "bot" ++ get_bot_token().
+
 get_url(send_message) ->
-  get_telegram_url() ++ "bot" ++ get_bot_token() ++ "/sendmessage".
+  get_root_url() ++ "/sendmessage";
+
+get_url(forward_message) ->
+  get_root_url() ++ "/forwardmessage".
 
 send_request(#http_req{type = Type, url = Url, headers = Headers, body = Body}) ->
   httpc:request(Type, {Url, Headers, "application/json",Body}, [], []).
+
+forward_message(ForwardMessage) ->
+
+  #frwd_message{
+    chat_id = ChatId,
+    from_chat_id = FromChatId,
+    disable_notification = DisableNotifications,
+    message_id = MessageId
+  } = ForwardMessage,
+
+  PreBody =
+  [
+    {<<"chat_id">>, ChatId},
+    {<<"from_chat_id">>, FromChatId},
+    {<<"disable_notification">>, DisableNotifications},
+    {<<"message_id">>, MessageId}
+  ],
+
+  Body = [{K,V} || {K,V} <-PreBody, V =/= undefined],
+
+  JsonBody = util:to_json({Body}),
+  Url = get_url(forward_message),
+
+  send_request(#http_req{type = ?POST, url = Url, headers = [{"Content-Type", "application/json"}], body = JsonBody}).
