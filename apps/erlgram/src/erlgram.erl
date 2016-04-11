@@ -23,37 +23,31 @@ test() ->
   send_message(#message{chat_id = <<"-133878532">>, text = <<"test">>}).
 
 send_request(#http_req{type = Type, url = Url, headers = Headers, body = Body}) ->
-  httpc:request(Type, {Url, Headers, "application/json",Body}, [], []).
+  httpc:request(Type, {Url, Headers, "application/json", Body}, [], []).
 
-send_message(Message) ->
+send_message(Message) when is_record(message, Message) ->
 
-  PreBody = ?RECORD_TO_TUPLELIST(message, Message),
-
-  Body = [{K,V} || {K,V} <-PreBody, V =/= undefined],
-
-  JsonBody = util:to_json({Body}),
+  Body = ?RECORD_TO_TUPLELIST(message, Message),
   Url = erlgram_utils:get_url(send_message),
+  send_to_telegram(Body, Url).
 
-  send_request(#http_req{type = ?POST, url = Url, headers = [{"Content-Type", "application/json"}], body = JsonBody}).
+forward_message(ForwardMessage) when is_record(frwd_message, ForwardMessage) ->
 
-
-forward_message(ForwardMessage) ->
-
-  PreBody = ?RECORD_TO_TUPLELIST(frwd_message, ForwardMessage),
-
-  Body = [{K,V} || {K,V} <-PreBody, V =/= undefined],
-
-  JsonBody = util:to_json({Body}),
+  Body = ?RECORD_TO_TUPLELIST(frwd_message, ForwardMessage),
   Url = erlgram_utils:get_url(forward_message),
+  send_to_telegram(Body, Url).
 
-  send_request(#http_req{type = ?POST, url = Url, headers = [{"Content-Type", "application/json"}], body = JsonBody}).
+send_location(LocationMessage) when is_record(location, LocationMessage) ->
 
-send_location(LocationMessage) ->
-
-  PreBody = ?RECORD_TO_TUPLELIST(location, LocationMessage),
-  Body = [{K,V} || {K,V} <-PreBody, V =/= undefined],
-
-  JsonBody = util:to_json({Body}),
+  Body = ?RECORD_TO_TUPLELIST(location, LocationMessage),
   Url = erlgram_utils:get_url(send_location),
+  send_to_telegram(Body, Url).
+
+
+send_to_telegram(PreBody, Url) ->
+
+  Body = [{K,V} || {K,V} <-PreBody, V =/= undefined],
+  JsonBody = util:to_json({Body}),
 
   send_request(#http_req{type = ?POST, url = Url, headers = [{"Content-Type", "application/json"}], body = JsonBody}).
+
