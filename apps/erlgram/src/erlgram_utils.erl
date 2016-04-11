@@ -28,10 +28,16 @@ get_root_url() ->
   get_telegram_url() ++ "bot" ++ get_bot_token().
 
 get_url(send_message) ->
-  get_root_url() ++ "/sendmessage";
+  get_root_url() ++ "/sendMessage";
 
 get_url(send_location) ->
-  get_root_url() ++ "/sendlocation";
+  get_root_url() ++ "/sendLocation";
+
+get_url(chat_action) ->
+  get_root_url() ++ "/sendChatAction";
+
+get_url(get_user_photos) ->
+  get_root_url() ++ "/getUserProfilePhotos";
 
 get_url(forward_message) ->
-  get_root_url() ++ "/forwardmessage".
+  get_root_url() ++ "/forwardMessage".

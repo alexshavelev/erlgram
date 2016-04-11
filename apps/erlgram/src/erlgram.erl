@@ -10,13 +10,16 @@
 -author("alex_shavelev").
 
 -include("settings.hrl").
+-include("records.hrl").
 
 %% API
 -export([
   test/0,
   send_message/1,
   forward_message/1,
-  send_location/1
+  send_location/1,
+  send_chat_action/1,
+  get_user_profile_photo/1
 ]).
 
 test() ->
@@ -43,6 +46,17 @@ send_location(LocationMessage) when is_record(LocationMessage, location) ->
   Url = erlgram_utils:get_url(send_location),
   send_to_telegram(Body, Url).
 
+send_chat_action(ChatActionMessage) when is_record(ChatActionMessage, chat_action) ->
+
+  Body = ?RECORD_TO_TUPLELIST(chat_action, ChatActionMessage),
+  Url = erlgram_utils:get_url(chat_action),
+  send_to_telegram(Body, Url).
+
+get_user_profile_photo(UserProfilePhotos) when is_record(UserProfilePhotos, user_photos) ->
+
+  Body = ?RECORD_TO_TUPLELIST(user_photos, ChatActionMessage),
+  Url = erlgram_utils:get_url(get_user_photos),
+  send_to_telegram(Body, Url).
 
 send_to_telegram(PreBody, Url) ->
 
