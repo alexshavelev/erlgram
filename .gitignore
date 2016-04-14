@@ -1,6 +1,7 @@
 *.beam
 *.swp
 *.deb
+/.idea/
 /build/
 /erlgram/
 erl_crash.dump
