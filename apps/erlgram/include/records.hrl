@@ -44,6 +44,7 @@
   url,
   headers,
   body,
+  port = 443,
   timeout = 5000
 }).
 
@@ -51,4 +52,29 @@
   user_id,
   offset = undefined,
   limit = undefined
+}).
+
+-record(contact, {
+  chat_id,
+  phone_number,
+  first_name,
+  last_name,
+  disable_notification,
+  reply_to_message_id,
+  reply_markup
+}).
+
+
+-record(file, {
+  file_id
+}).
+
+-record(photo, {
+  chat_id,
+  photo,
+  caption,
+  disable_notification,
+  reply_to_message_id,
+  reply_markup,
+  type :: file | link
 }).

@@ -27,17 +27,14 @@ get_telegram_url() ->
 get_root_url() ->
   get_telegram_url() ++ "bot" ++ get_bot_token().
 
-get_url(send_message) ->
-  get_root_url() ++ "/sendMessage";
+get_url(Method) ->
+  get_root_url() ++ get_path(Method).
 
-get_url(send_location) ->
-  get_root_url() ++ "/sendLocation";
-
-get_url(chat_action) ->
-  get_root_url() ++ "/sendChatAction";
-
-get_url(get_user_photos) ->
-  get_root_url() ++ "/getUserProfilePhotos";
-
-get_url(forward_message) ->
-  get_root_url() ++ "/forwardMessage".
+get_path(send_message) ->"/sendMessage";
+get_path(contact) ->"/sendContact";
+get_path(file) ->"/getFile";
+get_path(send_location) ->"/sendLocation";
+get_path(chat_action) -> "/sendChatAction";
+get_path(photo) -> "/sendPhoto";
+get_path(get_user_photos) -> "/getUserProfilePhotos";
+get_path(forward_message) -> "/forwardMessage".
