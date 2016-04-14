@@ -54,7 +54,7 @@ send_chat_action(ChatActionMessage) when is_record(ChatActionMessage, chat_actio
 
 get_user_profile_photo(UserProfilePhotos) when is_record(UserProfilePhotos, user_photos) ->
 
-  Body = ?RECORD_TO_TUPLELIST(user_photos, ChatActionMessage),
+  Body = ?RECORD_TO_TUPLELIST(user_photos, UserProfilePhotos),
   Url = erlgram_utils:get_url(get_user_photos),
   send_to_telegram(Body, Url).
 

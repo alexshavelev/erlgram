@@ -11,7 +11,7 @@
                   ssl,
                   jiffy,
                   jsx,
-                  cowboy
+                  shotgun
                  ]},
   {mod, { erlgram_app, []}},
   {env, []}

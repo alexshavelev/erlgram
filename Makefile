@@ -19,17 +19,17 @@ all: build
 
 clean:
 	rm -rf build
-	./rebar clean
+	./rebar3 clean
 
 deps:
-	./rebar get-deps
+	./rebar3 get-deps
 
 compile: deps
-	./rebar compile
-	./rebar xref skip_apps=goldrush
+	./rebar3 compile
+	./rebar3 xref skip_apps=goldrush
 
 build: compile
-	./rebar generate overlay_vars=$(OVERLAY_VARS)
+	./rebar3 generate overlay_vars=$(OVERLAY_VARS)
 
 run: clean
 	make OVERLAY_VARS=files/vars-dev.config

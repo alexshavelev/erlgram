@@ -1,0 +1,57 @@
+# credits to virtualenv
+kerl_deactivate()
+{
+    if [ -n "$_KERL_PATH_REMOVABLE" ]; then
+        PATH=${PATH//${_KERL_PATH_REMOVABLE}:/}
+        export PATH
+        unset _KERL_PATH_REMOVABLE
+    fi
+    if [ -n "$_KERL_MANPATH_REMOVABLE" ]; then
+        MANPATH=${MANPATH//${_KERL_MANPATH_REMOVABLE}:/}
+        export MANPATH
+        unset _KERL_MANPATH_REMOVABLE
+    fi
+    if [ -n "$_KERL_SAVED_REBAR_PLT_DIR" ]; then
+        REBAR_PLT_DIR="$_KERL_SAVED_REBAR_PLT_DIR"
+        export REBAR_PLT_DIR
+        unset _KERL_SAVED_REBAR_PLT_DIR
+    fi
+    if [ -n "$_KERL_ACTIVE_DIR" ]; then
+        unset _KERL_ACTIVE_DIR
+    fi
+    if [ -n "$_KERL_SAVED_PS1" ]; then
+        PS1="$_KERL_SAVED_PS1"
+        export PS1
+        unset _KERL_SAVED_PS1
+    fi
+    if [ -n "$BASH" -o -n "$ZSH_VERSION" ]; then
+        hash -r
+    fi
+    if [ ! "$1" = "nondestructive" ]; then
+        unset -f kerl_deactivate
+    fi
+}
+kerl_deactivate nondestructive
+
+_KERL_SAVED_REBAR_PLT_DIR="$REBAR_PLT_DIR"
+export _KERL_SAVED_REBAR_PLT_DIR
+_KERL_PATH_REMOVABLE="/home/alex_shavelev/projects/erlgram/bin"
+PATH="${_KERL_PATH_REMOVABLE}:$PATH"
+export PATH _KERL_PATH_REMOVABLE
+_KERL_MANPATH_REMOVABLE="/home/alex_shavelev/projects/erlgram/man"
+MANPATH="${_KERL_MANPATH_REMOVABLE}:$MANPATH"
+export MANPATH _KERL_MANPATH_REMOVABLE
+REBAR_PLT_DIR="/home/alex_shavelev/projects/erlgram"
+export REBAR_PLT_DIR
+_KERL_ACTIVE_DIR="/home/alex_shavelev/projects/erlgram"
+export _KERL_ACTIVE_DIR
+if [ -f "/home/alex_shavelev/.kerlrc" ]; then . "/home/alex_shavelev/.kerlrc"; fi
+if [ -n "$KERL_ENABLE_PROMPT" ]; then
+    _KERL_SAVED_PS1="$PS1"
+    export _KERL_SAVED_PS1
+    PS1="(r18.2)$PS1"
+    export PS1
+fi
+if [ -n "$BASH" -o -n "$ZSH_VERSION" ]; then
+    hash -r
+fi

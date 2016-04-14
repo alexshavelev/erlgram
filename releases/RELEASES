@@ -1,0 +1,5 @@
+[{release,"Erlang/OTP","18","7.2",
+          [{kernel,"4.1.1","/home/alex_shavelev/projects/erlgram/lib/kernel-4.1.1"},
+           {stdlib,"2.7","/home/alex_shavelev/projects/erlgram/lib/stdlib-2.7"},
+           {sasl,"2.6.1","/home/alex_shavelev/projects/erlgram/lib/sasl-2.6.1"}],
+          permanent}].
